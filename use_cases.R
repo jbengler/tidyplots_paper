@@ -7,7 +7,7 @@ library(tidyplots)
 gene_expression %>%
   tidyplot(x = sample, y = external_gene_name, color = expression) %>%
   add_heatmap(scale = "row", rasterize = TRUE) %>%
-  adjust_size(height = 120) %>%
+  adjust_size(height = 110) %>%
   sort_y_axis_labels(direction, -padj) %>%
   adjust_theme_details(legend.key.height = unit(1, "null")) %>%
   adjust_legend_title("Row Z-score") %>%
@@ -62,22 +62,6 @@ df %>%
   save_plot("Fig3c.pdf")
 
 
-### Principal component plot
-
-df <-
-  read_csv("https://tidyplots.org/data/pca-plot.csv")
-
-p2 <-
-  df %>%
-  tidyplot(x = pc1, y = pc2, color = group) %>%
-  add_data_points(size = 1.3, white_border = TRUE) %>%
-  adjust_x_axis_title(paste0("Component 1 (", format_number(df$pc1_var*100), "%)")) %>%
-  adjust_y_axis_title(paste0("Component 2 (", format_number(df$pc2_var*100), "%)")) %>%
-  adjust_colors(colors_discrete_apple) %>%
-  adjust_legend_position("top") %>%
-  remove_legend_title() %>%
-  save_plot("Fig3d.pdf")
-
 ### Correlation
 
 library(tidyverse)
@@ -97,36 +81,10 @@ df %>%
   adjust_legend_position("right") %>%
   adjust_colors(colors_continuous_inferno) %>%
   adjust_theme_details(legend.key.height = unit(1, "null")) %>%
-  save_plot("Fig3e.pdf")
+  save_plot("Fig3d.pdf")
 
 
-### Read alignment, relative
-
-library(tidyverse)
-library(tidyplots)
-
-df <- read_csv("https://tidyplots.org/data/sequencing-qc-STAR.csv")
-
-my_colors <- c("Uniquely mapped" = "#437bb1",
-               "Mapped to multiple loci" = "#7cb5ec",
-               "Mapped to too many loci" = "#f7a35c",
-               "Unmapped: too short" = "#b1084c",
-               "Unmapped: other" = "#7f0000")
-
-df %>%
-  tidyplot(x = reads, y = sample, color = category) %>%
-  add_barstack_relative(reverse = TRUE) %>%
-  theme_minimal_x() %>%
-  adjust_colors(my_colors) %>%
-  adjust_x_axis(title = "Percentage of reads", labels = scales::percent) %>%
-  adjust_size(70, 50) %>%
-  reorder_color_labels(names(my_colors)) %>%
-  remove_legend_title() %>%
-  remove_y_axis_title() %>%
-  save_plot("Fig3f.pdf")
-
-
-### Feature counts, relative
+### Feature counts
 
 library(tidyverse)
 library(tidyplots)
@@ -143,9 +101,8 @@ df %>%
   add_barstack_relative(reverse = TRUE) %>%
   theme_minimal_x() %>%
   adjust_colors(my_colors) %>%
-  adjust_x_axis(title = "Percentage of reads", labels = scales::percent) %>%
-  adjust_size(70, 50) %>%
+  adjust_x_axis(title = "Percentage of reads", labels = scales::percent, padding = c(0, 0)) %>%
   reorder_color_labels(names(my_colors)) %>%
   remove_legend_title() %>%
   remove_y_axis_title() %>%
-  save_plot("Fig3g.pdf")
+  save_plot("Fig3e.pdf")
